@@ -12,35 +12,33 @@ const GlassCard = ({
   const cardVariants = {
     initial: { 
       opacity: 0, 
-      y: 20,
-      scale: 0.95
+      y: 10,
+      scale: 0.98
     },
     animate: { 
       opacity: 1, 
       y: 0,
       scale: 1,
       transition: {
-        duration,
+        duration: duration * 0.5,
         delay,
-        type: "spring",
-        stiffness: 100,
-        damping: 15
+        type: "ease",
+        ease: "easeOut"
       }
     }
   }
 
   const hoverVariants = hover ? {
     whileHover: {
-      y: -4,
       transition: {
         duration: 0.2,
         ease: "easeOut"
       }
     },
     whileTap: {
-      scale: 0.98,
+      scale: 0.995,
       transition: {
-        duration: 0.1
+        duration: 0.05
       }
     }
   } : {}

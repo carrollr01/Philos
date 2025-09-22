@@ -27,13 +27,11 @@ const Button = ({
       type={type}
       disabled={disabled || loading}
       whileHover={!disabled && !loading ? { 
-        filter: 'brightness(110%)',
-        y: -2,
         transition: { duration: 0.2 }
       } : {}}
       whileTap={!disabled && !loading ? { 
-        scale: 0.95,
-        transition: { duration: 0.1 }
+        scale: 0.98,
+        transition: { duration: 0.05 }
       } : {}}
       {...props}
     >
