@@ -446,36 +446,6 @@ function App() {
             <p>Say goodbye to quietly hoping to bump into your next friend</p>
           </section>
 
-          {/* Examples */}
-          <section className="examples">
-            <div className="example-card">
-              <div className="example-header">Sarah's Top 5</div>
-              <div className="example-sub">26 · Denver</div>
-              <div className="pills-row">
-                {['Morning trail runs','Pottery classes','True crime podcasts','Farmers markets','Board game nights'].map((t, i) => (
-                  <span className="pill-chip" key={i}>{i + 1}. {t}</span>
-                ))}
-              </div>
-            </div>
-            <div className="example-card">
-              <div className="example-header">Marcus's Top 5</div>
-              <div className="example-sub">31 · Austin</div>
-              <div className="pills-row">
-                {['Live music on Tuesdays','BBQ experiments','Vintage synthesizers','Dawn photography','Chess in the park'].map((t, i) => (
-                  <span className="pill-chip" key={i}>{i + 1}. {t}</span>
-                ))}
-              </div>
-            </div>
-            <div className="example-card">
-              <div className="example-header">Maya's Top 5</div>
-              <div className="example-sub">24 · Portland</div>
-              <div className="pills-row">
-                {['Indie bookstores','Sourdough starters','Midnight bike rides','Thrifted vinyl','Rooftop conversations'].map((t, i) => (
-                  <span className="pill-chip" key={i}>{i + 1}. {t}</span>
-                ))}
-              </div>
-            </div>
-          </section>
 
           {/* Auth */}
           <section className="auth-card">
