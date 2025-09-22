@@ -551,13 +551,15 @@ function App() {
                 <p className="subtitle">Complete your profile to find friends with similar interests!</p>
 
                 <div className="billing-row">
-                  <span className={`badge ${updateInfo.premium ? 'badge-premium' : 'badge-basic'}`}>
-                    {updateInfo.premium ? 'Premium' : 'Basic'}
-                  </span>
-                  <span className="update-count">Updates used: {updateInfo.updateCount}</span>
-                  {!updateInfo.premium && updateInfo.updateCount >= 1 && (
-                    <span className="upgrade-note">Unlock unlimited updates for $0.99</span>
+                  {updateInfo.premium && (
+                    <span className="premium-star">⭐</span>
                   )}
+                  <div className="update-info">
+                    <span className="update-count">Updates used: {updateInfo.updateCount}</span>
+                    {!updateInfo.premium && updateInfo.updateCount >= 1 && (
+                      <div className="upgrade-note">Unlock unlimited updates for $0.99</div>
+                    )}
+                  </div>
                 </div>
 
                 <GlassCard className="form-card" delay={0.2}>
