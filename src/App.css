@@ -284,11 +284,41 @@ button:active {
   margin: 10px 0;
   padding: 8px;
   border: 1px solid var(--border);
+  max-width: 80%;
 }
 
 .message.sent {
-  text-align: right;
-  background: var(--hover);
+  background: #F0F8FF; /* Very faint blue tint */
+  margin-left: 20%;
+  margin-right: 0;
+  text-align: left;
+}
+
+.message.received {
+  background: var(--background);
+  margin-left: 0;
+  margin-right: 20%;
+  text-align: left;
+}
+
+/* Chat message cards */
+.message-card {
+  margin: 10px 0;
+  padding: 8px;
+  border: 1px solid var(--border);
+  max-width: 80%;
+}
+
+.message-card.sent {
+  background: #F0F8FF; /* Very faint blue tint */
+  margin-left: 20%;
+  margin-right: 0;
+}
+
+.message-card.received {
+  background: var(--background);
+  margin-left: 0;
+  margin-right: 20%;
 }
 
 .chat-input {
