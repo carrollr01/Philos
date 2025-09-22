@@ -499,25 +499,25 @@ function App() {
             </div>
 
             <form onSubmit={handleAuth}>
-              <div className="floating-input">
+              <div className="auth-input-group">
                 <input
                   id="email"
                   type="email"
                   value={authData.email}
                   onChange={(e) => setAuthData({ ...authData, email: e.target.value })}
-                  placeholder=" "
+                  placeholder="Enter your email"
                   required
                 />
                 <label htmlFor="email">Email</label>
               </div>
               
-              <div className="floating-input">
+              <div className="auth-input-group">
                 <input
                   id="password"
                   type="password"
                   value={authData.password}
                   onChange={(e) => setAuthData({ ...authData, password: e.target.value })}
-                  placeholder=" "
+                  placeholder="Enter your password"
                   required
                 />
                 <label htmlFor="password">Password</label>
@@ -701,18 +701,18 @@ function App() {
                 {/* Favorites */}
                 <h3>Your 5 Favorite Things</h3>
                 {favorites.map((favorite, index) => (
-                  <div key={index} className="floating-input">
+                  <div key={index} className="form-group">
+                    <label htmlFor={`favorite-${index + 1}`}>
+                      Favorite Thing #{index + 1}
+                    </label>
                     <input
                       id={`favorite-${index + 1}`}
                       type="text"
                       value={favorite}
                       onChange={(e) => handleInputChange(index, e.target.value)}
-                      placeholder=" "
+                      placeholder={`Enter your ${['first', 'second', 'third', 'fourth', 'fifth'][index]} favorite thing`}
                       maxLength={100}
                     />
-                    <label htmlFor={`favorite-${index + 1}`}>
-                      Favorite Thing #{index + 1}
-                    </label>
                     <span className="char-count">
                       {favorite.length}/100
                     </span>

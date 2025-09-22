@@ -108,6 +108,44 @@ button:active {
   margin-bottom: 5px;
 }
 
+/* Character count styling */
+.char-count {
+  font-size: 10px;
+  color: #888888;
+  text-align: right;
+  display: block;
+  margin-top: 2px;
+  margin-bottom: 10px;
+}
+
+/* Floating input container for better spacing */
+.floating-input {
+  position: relative;
+  margin-bottom: 15px;
+}
+
+.floating-input label {
+  font-size: 12px;
+  font-weight: bold;
+  margin-bottom: 3px;
+  display: block;
+}
+
+/* Auth form specific styling */
+.auth-input-group {
+  margin-bottom: 15px;
+}
+
+.auth-input-group input {
+  margin-bottom: 3px;
+}
+
+.auth-input-group label {
+  font-size: 11px;
+  color: #666666;
+  margin-bottom: 0;
+}
+
 /* Navigation */
 .header {
   border-bottom: 1px solid var(--border);
