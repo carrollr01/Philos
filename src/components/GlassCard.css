@@ -1,116 +1,12 @@
-/* Glass Card Component */
+/* Simple card - no glass effects */
 .glass-card {
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  background: rgba(255, 255, 255, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 20px;
-  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.glass-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-  pointer-events: none;
+  border: 1px solid #CCCCCC;
+  padding: 15px;
+  margin: 15px 0;
+  background: #FFFFFF;
+  font-family: 'Times New Roman', Times, serif;
 }
 
 .glass-card:hover {
-  box-shadow: 0 12px 48px rgba(31, 38, 135, 0.15);
-  border-color: rgba(255, 255, 255, 0.25);
-}
-
-/* Variants for different contexts */
-.glass-card.profile-card {
-  padding: 24px;
-  margin-bottom: 20px;
-}
-
-.glass-card.browse-card {
-  padding: 20px;
-  width: 100%;
-  max-width: 400px;
-  margin: 0 auto;
-}
-
-.glass-card.chat-card {
-  padding: 16px;
-  margin-bottom: 12px;
-}
-
-.glass-card.form-card {
-  padding: 28px;
-  margin: 20px 0;
-}
-
-.glass-card.match-card {
-  padding: 16px;
-  margin-bottom: 12px;
-  cursor: pointer;
-}
-
-.glass-card.message-card {
-  padding: 12px 16px;
-  margin: 6px 0;
-  max-width: 80%;
-  border-radius: 18px;
-}
-
-.glass-card.message-card.sent {
-  background: rgba(76, 175, 162, 0.8);
-  margin-left: auto;
-  border-bottom-right-radius: 6px;
-}
-
-.glass-card.message-card.received {
-  background: rgba(255, 255, 255, 0.8);
-  margin-right: auto;
-  border-bottom-left-radius: 6px;
-}
-
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-  .glass-card {
-    background: rgba(17, 25, 40, 0.8);
-    border-color: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-  }
-  
-  .glass-card:hover {
-    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.3);
-    border-color: rgba(255, 255, 255, 0.15);
-  }
-  
-  .glass-card::before {
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-  }
-  
-  .glass-card.message-card.received {
-    background: rgba(45, 55, 75, 0.8);
-  }
-}
-
-/* Mobile optimizations */
-@media (max-width: 768px) {
-  .glass-card.profile-card,
-  .glass-card.form-card {
-    padding: 20px;
-    margin: 16px 0;
-  }
-  
-  .glass-card.browse-card {
-    padding: 16px;
-  }
-  
-  .glass-card.chat-card,
-  .glass-card.match-card {
-    padding: 14px;
-  }
+  background: #F5F5F5;
 }
