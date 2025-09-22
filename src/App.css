@@ -3,7 +3,8 @@
   --background: #FFFFFF;
   --text: #000000;
   --border: #CCCCCC;
-  --link: #0066CC;
+  --link: #000000;
+  --hover: #F5F5F5;
 }
 
 * {
@@ -54,6 +55,7 @@ a {
 }
 
 a:hover {
+  background: var(--hover);
   text-decoration: none;
 }
 
@@ -69,7 +71,7 @@ input, select, textarea {
 
 input:focus, select:focus, textarea:focus {
   outline: none;
-  border-color: var(--link);
+  border-color: var(--text);
 }
 
 button {
@@ -82,7 +84,7 @@ button {
 }
 
 button:hover {
-  background: #F0F0F0;
+  background: var(--hover);
 }
 
 button:active {
@@ -138,10 +140,11 @@ button:active {
   color: var(--link);
   text-decoration: underline;
   cursor: pointer;
-  padding: 0;
+  padding: 4px 8px;
 }
 
 .nav-button:hover {
+  background: var(--hover);
   text-decoration: none;
 }
 
@@ -169,10 +172,11 @@ button:active {
   text-decoration: underline;
   cursor: pointer;
   margin-right: 20px;
-  padding: 0;
+  padding: 4px 8px;
 }
 
 .auth-tab:hover {
+  background: var(--hover);
   text-decoration: none;
 }
 
@@ -238,7 +242,7 @@ button:active {
 
 .message.sent {
   text-align: right;
-  background: #F0F0F0;
+  background: var(--hover);
 }
 
 .chat-input {
@@ -266,7 +270,7 @@ button:active {
 }
 
 .match-card:hover {
-  background: #F0F0F0;
+  background: var(--hover);
 }
 
 /* Utility */
