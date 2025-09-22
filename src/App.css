@@ -74,6 +74,14 @@ input:focus, select:focus, textarea:focus {
   border-color: var(--text);
 }
 
+input:hover, select:hover, textarea:hover {
+  background: var(--hover);
+}
+
+input:focus:hover, select:focus:hover, textarea:focus:hover {
+  background: var(--background);
+}
+
 button {
   background: var(--background);
   border: 1px solid var(--border);
