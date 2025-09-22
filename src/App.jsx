@@ -442,7 +442,7 @@ function App() {
         <div className="landing">
           {/* Hero */}
           <section className="hero">
-            <h1>Meet interesting people, interested in meeting you</h1>
+              <h1>🚀 Live Auto-Deploy Test - Build #{Math.floor(Date.now()/1000)} 🚀</h1>
             <p>Say goodbye to quietly hoping to bump into your next friend</p>
           </section>
 
