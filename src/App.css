@@ -33,7 +33,7 @@ html,body{height:100%}
   width: 100vw;
   height: 100vh;
   z-index: -1;
-  background: linear-gradient(135deg, #E3F2F1 0%, #F0F9F8 50%, #E8F5F3 100%);
+  background: linear-gradient(135deg, #FFB6C1 0%, #FFC0CB 50%, #FF69B4 100%);
   background-size: 200% 200%;
   animation: gradient 15s ease infinite;
 }
