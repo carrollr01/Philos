@@ -452,6 +452,7 @@ button:active {
   top: 0;
   right: 0;
   font-size: 18px;
+  color: var(--text);
 }
 
 .update-info {

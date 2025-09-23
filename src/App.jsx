@@ -604,7 +604,7 @@ function App() {
 
                 <div className="billing-row">
                   {updateInfo.premium && (
-                    <span className="premium-star">⭐</span>
+                    <span className="premium-star">★</span>
                   )}
                   <div className="update-info">
                     <span className="update-count">Updates used: {updateInfo.updateCount}</span>
