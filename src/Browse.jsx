@@ -483,17 +483,16 @@ function Browse() {
                   )}
 
                   <div className="favorites-section">
-                    <ul className="favorites-list">
-                      {profile.favorites.map((fav, idx) => {
-                        const isExactMatch = profileMatchData.exactMatches.some(match => match.index2 === idx)
-                        return (
-                          <li key={idx} className={`favorite-item ${isExactMatch ? 'exact-match' : ''}`}>
-                            {idx + 1}. {fav}
-                            {isExactMatch && <span className="sparkle">✨</span>}
-                          </li>
-                        )
-                      })}
-                    </ul>
+                    {profile.favorites.map((fav, idx) => {
+                      const isExactMatch = profileMatchData.exactMatches.some(match => match.index2 === idx)
+                      return (
+                        <div key={idx} className={`favorite-item ${isExactMatch ? 'exact-match' : ''}`}>
+                          <span className="favorite-number">#{idx + 1}</span>
+                          <span className="favorite-text">{fav}</span>
+                          {isExactMatch && <span className="sparkle">✨</span>}
+                        </div>
+                      )
+                    })}
                   </div>
 
                   {isCurrent && (
