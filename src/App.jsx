@@ -44,13 +44,23 @@ function App() {
   const checkUser = async () => {
     try {
       const { user, error } = await getUser()
-      if (error) throw error
+      if (error) {
+        console.error('Auth error:', error)
+        // Clear any invalid session
+        setUser(null)
+        setMode('profile') // Reset to profile mode
+        setLoading(false)
+        return
+      }
       setUser(user)
       if (user) {
         await loadExistingFavorites(user.id)
       }
     } catch (error) {
       console.error('Error checking user:', error)
+      // Clear any invalid session
+      setUser(null)
+      setMode('profile') // Reset to profile mode
     } finally {
       setLoading(false)
     }
@@ -766,10 +776,18 @@ function App() {
             )}
           </>
         ) : mode === 'browse' ? (
-          <Browse key={browseRefreshKey} />
-        ) : (
-          <Chat />
-        )}
+          user && isProfileComplete() ? (
+            <Browse key={browseRefreshKey} />
+          ) : (
+            <div className="error-message">Please complete your profile first to browse</div>
+          )
+        ) : mode === 'chat' ? (
+          user && isProfileComplete() ? (
+            <Chat />
+          ) : (
+            <div className="error-message">Please complete your profile first to view matches</div>
+          )
+        ) : null}
       </div>
       <MobileTabBar />
     </div>
