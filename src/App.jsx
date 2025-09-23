@@ -118,17 +118,43 @@ function App() {
     e.preventDefault()
     setAuthError('')
     
+    // Debug logging
+    console.log('🔐 Auth attempt:', {
+      mode: authMode,
+      email: authData.email,
+      passwordLength: authData.password?.length || 0,
+      hasEmail: !!authData.email,
+      hasPassword: !!authData.password
+    })
+    
+    // Basic validation
+    if (!authData.email || !authData.password) {
+      setAuthError('Please enter both email and password')
+      return
+    }
+    
+    if (authData.password.length < 6) {
+      setAuthError('Password must be at least 6 characters')
+      return
+    }
+    
     try {
       let result
       if (authMode === 'signup') {
+        console.log('🔐 Calling signUp...')
         result = await signUp(authData.email, authData.password)
       } else {
+        console.log('🔐 Calling signIn...')
         result = await signIn(authData.email, authData.password)
       }
       
+      console.log('🔐 Auth result:', result)
+      
       if (result.error) {
+        console.error('🔐 Auth error:', result.error)
         setAuthError(result.error.message)
       } else {
+        console.log('🔐 Auth success:', result.data)
         setUser(result.data.user)
         setAuthData({ email: '', password: '' })
         setAuthError('')
@@ -137,7 +163,8 @@ function App() {
         }
       }
     } catch (error) {
-      setAuthError('An unexpected error occurred')
+      console.error('🔐 Auth exception:', error)
+      setAuthError('An unexpected error occurred: ' + error.message)
     }
   }
 
