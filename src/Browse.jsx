@@ -179,16 +179,13 @@ function Browse() {
         .limit(100)
       if (candidatesError) throw candidatesError
 
-      // Filter compatible candidates
+      // Filter compatible candidates - relaxed filtering for better discovery
       const compatibleCandidates = (candidates || []).filter(c => {
         if (!Array.isArray(c.favorites) || c.favorites.length === 0) return false
         if (excludedIds.has(c.user_id)) return false
-
-        const theirLooking = Array.isArray(c.looking_for) ? c.looking_for : []
-        const myLooking = currentPrefs.lookingFor || []
-        const theyAcceptMe = theirLooking.includes('No preference') || theirLooking.includes(currentPrefs.gender)
-        const iAcceptThem = myLooking.includes('No preference') || myLooking.includes(c.gender)
-        return theyAcceptMe && iAcceptThem
+        
+        // Show everyone regardless of gender preferences - let users decide
+        return true
       })
 
       // Sort by match quality using the sophisticated algorithm
