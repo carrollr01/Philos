@@ -32,28 +32,40 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 // Authentication helper functions
 export const signUp = async (email, password) => {
   try {
+    console.log('📝 Attempting sign up with:', { email, passwordLength: password?.length })
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
     })
     
-    if (error) throw error
+    if (error) {
+      console.error('🚨 Sign up error:', error)
+      throw error
+    }
+    console.log('✅ Sign up successful:', data)
     return { data, error: null }
   } catch (error) {
+    console.error('💥 Sign up failed:', error)
     return { data: null, error }
   }
 }
 
 export const signIn = async (email, password) => {
   try {
+    console.log('🔐 Attempting sign in with:', { email, passwordLength: password?.length })
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     })
     
-    if (error) throw error
+    if (error) {
+      console.error('🚨 Sign in error:', error)
+      throw error
+    }
+    console.log('✅ Sign in successful:', data)
     return { data, error: null }
   } catch (error) {
+    console.error('💥 Sign in failed:', error)
     return { data: null, error }
   }
 }
