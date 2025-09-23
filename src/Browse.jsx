@@ -179,20 +179,37 @@ function Browse() {
         .limit(100)
       if (candidatesError) throw candidatesError
 
+      // DEBUG: Log what we got from database
+      console.log('🔍 DEBUG: Raw candidates from DB:', candidates?.length || 0, candidates)
+      console.log('🔍 DEBUG: Excluded IDs:', Array.from(excludedIds))
+      console.log('🔍 DEBUG: Current user ID:', user.id)
+      console.log('🔍 DEBUG: Current favorites:', currentFavorites)
+
       // Filter compatible candidates - relaxed filtering for better discovery
       const compatibleCandidates = (candidates || []).filter(c => {
-        if (!Array.isArray(c.favorites) || c.favorites.length === 0) return false
-        if (excludedIds.has(c.user_id)) return false
+        if (!Array.isArray(c.favorites) || c.favorites.length === 0) {
+          console.log('❌ Filtered out (no favorites):', c.user_id)
+          return false
+        }
+        if (excludedIds.has(c.user_id)) {
+          console.log('❌ Filtered out (excluded):', c.user_id)
+          return false
+        }
         
+        console.log('✅ Keeping candidate:', c.user_id, c.favorites)
         // Show everyone regardless of gender preferences - let users decide
         return true
       })
+
+      console.log('🔍 DEBUG: Compatible candidates after filtering:', compatibleCandidates?.length || 0)
 
       // Sort by match quality using the sophisticated algorithm
       const sortedCandidates = sortUsersByMatch(compatibleCandidates, currentFavorites)
       
       // Load up to 3 profiles for the stack effect
       const stackProfiles = sortedCandidates.slice(0, 3)
+      console.log('🔍 DEBUG: Final stack profiles:', stackProfiles?.length || 0, stackProfiles)
+      
       setProfiles(stackProfiles)
       setCurrentIndex(0)
       if (stackProfiles.length === 0) setError('No more compatible profiles right now')
