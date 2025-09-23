@@ -209,6 +209,33 @@ function App() {
     }
   }
 
+  const handlePayment = async () => {
+    try {
+      // Simulate payment processing
+      const proceed = confirm('Payment simulation: $0.99 for unlimited updates.\n\nThis is a demo - no real payment will be charged.\n\nProceed with fake payment?')
+      if (!proceed) return false
+
+      // Simulate payment delay
+      await new Promise(resolve => setTimeout(resolve, 1500))
+
+      // Update user to premium
+      const { error } = await supabase
+        .from('user_favorites')
+        .update({ premium: true })
+        .eq('user_id', user.id)
+
+      if (error) throw error
+
+      setUpdateInfo(prev => ({ ...prev, premium: true }))
+      alert('Payment successful! You now have unlimited updates.')
+      return true
+    } catch (error) {
+      console.error('Payment error:', error)
+      alert('Payment failed. Please try again.')
+      return false
+    }
+  }
+
   const arraysEqual = (a = [], b = []) => {
     if (a.length !== b.length) return false
     const as = [...a]
@@ -314,8 +341,13 @@ function App() {
     const needsBilling = favoritesChanged()
 
     if (!updateInfo.premium && updateInfo.updateCount >= 1 && needsBilling) {
-      alert('Unlock unlimited updates for $0.99 (simulation). Go to Chat tab to proceed or contact support.')
-      return
+      const proceed = confirm('You need premium to make more updates. Would you like to upgrade to unlimited updates for $0.99?')
+      if (!proceed) {
+        setSaving(false)
+        return
+      }
+      await handlePayment()
+      // Continue with save after payment
     }
 
     try {
@@ -577,7 +609,13 @@ function App() {
                   <div className="update-info">
                     <span className="update-count">Updates used: {updateInfo.updateCount}</span>
                     {!updateInfo.premium && updateInfo.updateCount >= 1 && (
-                      <div className="upgrade-note">Unlock unlimited updates for $0.99</div>
+                      <button 
+                        className="upgrade-link"
+                        onClick={handlePayment}
+                        type="button"
+                      >
+                        Unlock unlimited updates for $0.99
+                      </button>
                     )}
                   </div>
                 </div>
