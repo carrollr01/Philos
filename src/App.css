@@ -161,12 +161,6 @@ button:active {
   margin-bottom: 20px;
 }
 
-.navbar {
-  display: flex;
-  gap: 20px;
-  align-items: center;
-}
-
 .brand {
   font-weight: bold;
   font-size: 18px;
@@ -180,24 +174,119 @@ button:active {
   height: 16px;
 }
 
-.nav-button {
-  background: none;
-  border: none;
-  color: var(--link);
-  text-decoration: underline;
-  cursor: pointer;
-  padding: 4px 8px;
+/* Desktop Navigation */
+.desktop-nav {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+  padding: 0 20px;
 }
 
-.nav-button:hover {
-  background: var(--hover);
-  text-decoration: none;
+.nav-links {
+  display: flex;
+  gap: 8px;
+  align-items: center;
 }
 
-.nav-button.active {
-  font-weight: bold;
+.nav-link {
+  background: var(--background);
+  border: 1px solid var(--border);
+  padding: 8px 16px;
   text-decoration: none;
   color: var(--text);
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: background 0.2s ease;
+}
+
+.nav-link:hover {
+  background: #F0F0F0;
+}
+
+.nav-link.active {
+  font-weight: bold;
+}
+
+.nav-link:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.nav-link:disabled:hover {
+  background: var(--background);
+}
+
+/* Mobile Navigation */
+.mobile-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--background);
+  border-top: 1px solid var(--border);
+  padding: 8px;
+  z-index: 100;
+}
+
+.mobile-nav-link {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: var(--background);
+  border: 1px solid var(--border);
+  padding: 8px 4px;
+  color: var(--text);
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 12px;
+  cursor: pointer;
+  border-radius: 3px;
+  margin: 0 2px;
+  transition: background 0.2s ease;
+}
+
+.mobile-nav-link:hover {
+  background: #F0F0F0;
+}
+
+.mobile-nav-link.active {
+  font-weight: bold;
+}
+
+.mobile-nav-link:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.mobile-nav-link:disabled:hover {
+  background: var(--background);
+}
+
+.nav-icon {
+  font-size: 16px;
+}
+
+.nav-text {
+  font-size: 10px;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .desktop-nav {
+    display: none;
+  }
+  
+  .mobile-nav {
+    display: flex;
+  }
+  
+  body {
+    padding-bottom: 70px; /* Account for fixed mobile nav */
+  }
 }
 
 /* Auth */

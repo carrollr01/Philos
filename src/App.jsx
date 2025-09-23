@@ -354,42 +354,62 @@ function App() {
   }
 
   const renderNav = () => (
-    <div className="navbar">
-      <div className="brand">
-        <img src="/philos-hand.svg" alt="Philos hand logo" className="brand-logo" />
-        <b>Philos</b>
-      </div>
-      <div className="pills">
-        <Button 
-          variant="ghost"
-          size="sm"
-          className={`pill ${mode === 'profile' ? 'active' : ''}`}
+    <>
+      {/* Desktop Navigation */}
+      <nav className="desktop-nav">
+        <div className="nav-links">
+          <button 
+            className={`nav-link ${mode === 'profile' ? 'active' : ''}`}
+            onClick={() => setMode('profile')}
+            disabled={!user}
+          >
+            👤 My Profile
+          </button>
+          <button 
+            className={`nav-link ${mode === 'browse' ? 'active' : ''}`}
+            onClick={() => setMode('browse')}
+            disabled={!user || !isProfileComplete()}
+          >
+            🔍 Browse
+          </button>
+          <button 
+            className={`nav-link ${mode === 'chat' ? 'active' : ''}`}
+            onClick={() => setMode('chat')}
+            disabled={!user || !isProfileComplete()}
+          >
+            💬 Chat
+          </button>
+        </div>
+      </nav>
+
+      {/* Mobile Navigation */}
+      <nav className="mobile-nav">
+        <button 
+          className={`mobile-nav-link ${mode === 'profile' ? 'active' : ''}`}
           onClick={() => setMode('profile')}
           disabled={!user}
         >
-          My Profile
-        </Button>
-        <Button 
-          variant="ghost"
-          size="sm"
-          className={`pill ${mode === 'browse' ? 'active' : ''}`}
+          <span className="nav-icon">👤</span>
+          <span className="nav-text">Profile</span>
+        </button>
+        <button 
+          className={`mobile-nav-link ${mode === 'browse' ? 'active' : ''}`}
           onClick={() => setMode('browse')}
           disabled={!user || !isProfileComplete()}
         >
-          Browse
-        </Button>
-        <Button 
-          variant="ghost"
-          size="sm"
-          className={`pill ${mode === 'chat' ? 'active' : ''}`}
+          <span className="nav-icon">🔍</span>
+          <span className="nav-text">Browse</span>
+        </button>
+        <button 
+          className={`mobile-nav-link ${mode === 'chat' ? 'active' : ''}`}
           onClick={() => setMode('chat')}
           disabled={!user || !isProfileComplete()}
         >
-          Chat
-        </Button>
-      </div>
-      <a className="logout-link" onClick={handleLogout}>Logout</a>
-    </div>
+          <span className="nav-icon">💬</span>
+          <span className="nav-text">Chat</span>
+        </button>
+      </nav>
+    </>
   )
 
   const MobileTabBar = () => (
