@@ -140,6 +140,8 @@ function Browse() {
           .select('gender, looking_for, latitude, longitude, favorites')
           .eq('user_id', user.id)
           .maybeSingle()
+        
+        let userFavorites = []
         if (me) {
           setCurrentPrefs({
             gender: me.gender || '',
@@ -147,10 +149,12 @@ function Browse() {
             latitude: me.latitude,
             longitude: me.longitude,
           })
-          setCurrentFavorites(Array.isArray(me.favorites) ? me.favorites : [])
+          userFavorites = Array.isArray(me.favorites) ? me.favorites : []
+          setCurrentFavorites(userFavorites)
         }
 
-        await fetchNextProfile(user)
+        // Pass favorites directly to avoid race condition
+        await fetchNextProfile(user, userFavorites)
       } catch (e) {
         setError('Failed to initialize browse')
       } finally {
@@ -160,8 +164,15 @@ function Browse() {
     init()
   }, [])
 
-  const fetchNextProfile = useCallback(async (user) => {
-    if (!user || currentFavorites.length === 0) return
+  const fetchNextProfile = useCallback(async (user, favorites = null) => {
+    // Use passed favorites or current state
+    const favoritesToUse = favorites || currentFavorites
+    
+    if (!user || favoritesToUse.length === 0) {
+      console.log('🔍 DEBUG: Early return - no user or favorites:', { user: !!user, favoritesLength: favoritesToUse.length })
+      return
+    }
+    
     setError('')
     setFetchingNext(true)
 
@@ -183,7 +194,7 @@ function Browse() {
       console.log('🔍 DEBUG: Raw candidates from DB:', candidates?.length || 0, candidates)
       console.log('🔍 DEBUG: Excluded IDs:', Array.from(excludedIds))
       console.log('🔍 DEBUG: Current user ID:', user.id)
-      console.log('🔍 DEBUG: Current favorites:', currentFavorites)
+      console.log('🔍 DEBUG: Current favorites:', favoritesToUse)
 
       // Filter compatible candidates - relaxed filtering for better discovery
       const compatibleCandidates = (candidates || []).filter(c => {
@@ -204,7 +215,7 @@ function Browse() {
       console.log('🔍 DEBUG: Compatible candidates after filtering:', compatibleCandidates?.length || 0)
 
       // Sort by match quality using the sophisticated algorithm
-      const sortedCandidates = sortUsersByMatch(compatibleCandidates, currentFavorites)
+      const sortedCandidates = sortUsersByMatch(compatibleCandidates, favoritesToUse)
       
       // Load up to 3 profiles for the stack effect
       const stackProfiles = sortedCandidates.slice(0, 3)
@@ -219,7 +230,7 @@ function Browse() {
     } finally {
       setFetchingNext(false)
     }
-  }, [currentPrefs, currentFavorites])
+  }, [currentFavorites])
 
   const handleSwipe = async (liked) => {
     if (!currentUser || !profiles[currentIndex] || actionLoading) return
@@ -271,7 +282,7 @@ function Browse() {
         setCurrentIndex(currentIndex + 1)
       } else {
         // Need to fetch more profiles
-        await fetchNextProfile(currentUser)
+        await fetchNextProfile(currentUser, currentFavorites)
       }
     } catch (e) {
       console.error('Error processing swipe', e)
