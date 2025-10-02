@@ -331,9 +331,8 @@ button:active {
 .browse-card {
   width: 350px;
   height: 500px;
-  border: 1px solid #CCCCCC;
-  border-radius: 12px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  border: 1px solid var(--border);
+  border-radius: 4px;
   background: var(--background);
   padding: 16px;
   margin: 20px auto;
@@ -352,7 +351,7 @@ button:active {
 .profile-image {
   width: 100px;
   height: 100px;
-  border-radius: 8px;
+  border-radius: 4px;
   object-fit: cover;
   flex-shrink: 0;
 }
@@ -360,7 +359,7 @@ button:active {
 .profile-placeholder {
   width: 100px;
   height: 100px;
-  border-radius: 8px;
+  border-radius: 4px;
   background: #F0F0F0;
   display: flex;
   align-items: center;
@@ -410,7 +409,7 @@ button:active {
 .favorite-item {
   background: #FAFAFA;
   border: 1px solid #F0F0F0;
-  border-radius: 6px;
+  border-radius: 4px;
   padding: 10px 12px;
   margin-bottom: 8px;
   font-size: 14px;
