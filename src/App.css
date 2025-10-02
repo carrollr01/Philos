@@ -333,7 +333,7 @@ button:active {
   height: 500px;
   border: 1px solid var(--border);
   border-radius: 4px;
-  background: var(--background);
+  background: #FFB6C1;
   padding: 16px;
   margin: 20px auto;
   display: flex;
