@@ -1,9 +1,7 @@
-import { useEffect, useState, useCallback, useRef } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useEffect, useState, useCallback } from 'react'
 import { supabase, getUser } from './supabase'
-import { calculateMatchScore, getMatchDesignation, sortUsersByMatch, formatMatchDetails } from './matchingAlgorithm'
+import { calculateMatchScore, getMatchDesignation, sortUsersByMatch } from './matchingAlgorithm'
 import { SkeletonProfileCard } from './SkeletonCard'
-import GlassCard from './components/GlassCard'
 import Button from './components/Button'
 
 // Calculate distance between two coordinates using Haversine formula
@@ -119,15 +117,6 @@ function Browse() {
   const [actionLoading, setActionLoading] = useState(false)
   const [fetchingNext, setFetchingNext] = useState(false)
   const [error, setError] = useState('')
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
-  const [exitDirection, setExitDirection] = useState(null) // 'like' or 'pass'
-
-  const cardRef = useRef(null)
-  const startX = useRef(0)
-  const currentX = useRef(0)
-  const dragging = useRef(false)
-
-  const threshold = 120 // px to trigger action
 
   useEffect(() => {
     const init = async () => {
@@ -236,7 +225,6 @@ function Browse() {
     if (!currentUser || !profiles[currentIndex] || actionLoading) return
     setActionLoading(true)
     setError('')
-    setExitDirection(liked ? 'like' : 'pass')
 
     const currentProfile = profiles[currentIndex]
 
@@ -292,76 +280,6 @@ function Browse() {
     }
   }
 
-  const handleMouseMove = (e) => {
-    if (!cardRef.current) return
-    const rect = cardRef.current.getBoundingClientRect()
-    const centerX = rect.left + rect.width / 2
-    const centerY = rect.top + rect.height / 2
-    const mouseX = e.clientX - centerX
-    const mouseY = e.clientY - centerY
-    
-    setMousePosition({ x: mouseX, y: mouseY })
-  }
-
-  const handleMouseLeave = () => {
-    setMousePosition({ x: 0, y: 0 })
-  }
-
-  const onPointerDown = (e) => {
-    if (!cardRef.current) return
-    dragging.current = true
-    startX.current = e.touches ? e.touches[0].clientX : e.clientX
-    currentX.current = startX.current
-    cardRef.current.style.transition = 'none'
-  }
-
-  const onPointerMove = (e) => {
-    if (!dragging.current || !cardRef.current) return
-    currentX.current = e.touches ? e.touches[0].clientX : e.clientX
-    const dx = currentX.current - startX.current
-    const rotate = Math.max(-15, Math.min(15, dx / 10))
-    cardRef.current.style.transform = `translateX(${dx}px) rotate(${rotate}deg)`
-    // Indicators
-    cardRef.current.dataset.like = dx > 40 ? 'true' : 'false'
-    cardRef.current.dataset.pass = dx < -40 ? 'true' : 'false'
-  }
-
-  const onPointerUp = async () => {
-    if (!cardRef.current) return
-    const dx = currentX.current - startX.current
-    cardRef.current.style.transition = 'transform .25s ease'
-    dragging.current = false
-
-    if (dx > threshold) {
-      // Like
-      cardRef.current.style.transform = 'translateX(400px) rotate(20deg)'
-      await handleSwipe(true)
-      resetCardStyle()
-    } else if (dx < -threshold) {
-      // Pass
-      cardRef.current.style.transform = 'translateX(-400px) rotate(-20deg)'
-      await handleSwipe(false)
-      resetCardStyle()
-    } else {
-      // Spring back
-      cardRef.current.style.transform = 'translateX(0) rotate(0)'
-      cardRef.current.dataset.like = 'false'
-      cardRef.current.dataset.pass = 'false'
-    }
-  }
-
-  const resetCardStyle = () => {
-    if (!cardRef.current) return
-    setTimeout(() => {
-      if (cardRef.current) {
-        cardRef.current.style.transition = 'none'
-        cardRef.current.style.transform = 'translateX(0) rotate(0)'
-        cardRef.current.dataset.like = 'false'
-        cardRef.current.dataset.pass = 'false'
-      }
-    }, 250)
-  }
-
   if (loading) {
     return <SkeletonProfileCard />
   }
@@ -395,159 +313,61 @@ function Browse() {
 
   // Calculate match data for this profile
   const matchData = currentProfile.matchData || calculateMatchScore(currentFavorites, currentProfile.favorites || [])
-  const designation = currentProfile.designation || getMatchDesignation(matchData.totalScore, matchData.exactMatches)
-  const matchDetails = formatMatchDetails(matchData)
-
-  // Calculate tilt based on mouse position
-  const tiltX = (mousePosition.y / 10) * -1
-  const tiltY = (mousePosition.x / 10)
 
   return (
     <div className="browse-wrapper">
-      <div className="card-stack">
-        <AnimatePresence mode="wait">
-          {profiles.slice(currentIndex, currentIndex + 3).map((profile, stackIndex) => {
-            const isCurrent = stackIndex === 0
-            const profileDistance = currentPrefs.latitude && currentPrefs.longitude && profile.latitude && profile.longitude
-              ? calculateDistance(currentPrefs.latitude, currentPrefs.longitude, profile.latitude, profile.longitude)
-              : null
-            const profileMatchData = profile.matchData || calculateMatchScore(currentFavorites, profile.favorites || [])
-            const profileDesignation = profile.designation || getMatchDesignation(profileMatchData.totalScore, profileMatchData.exactMatches)
-            const profileMatchDetails = formatMatchDetails(profileMatchData)
+      {profiles.length > 0 && (
+        <div className="browse-card">
+          <div className="profile-header">
+            {currentProfile.profile_picture ? (
+              <img src={currentProfile.profile_picture} alt="Profile" className="profile-image" />
+            ) : (
+              <div className="profile-placeholder">
+                {currentProfile.user_id.slice(0, 1).toUpperCase()}
+              </div>
+            )}
+            <div className="profile-info">
+              <h2>{(currentProfile.name || 'Friend') + "'s Top 5"}</h2>
+              <p className="location">{(currentProfile.age ? currentProfile.age + ' · ' : '') + (currentProfile.location || '')}</p>
+              {distance !== null && (
+                <p className="distance">📍 {distance} miles away</p>
+              )}
+            </div>
+          </div>
 
-            return (
-              <motion.div
-                key={profile.user_id}
-                className={`card-container ${isCurrent ? 'current' : 'stacked'}`}
-                initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                animate={{ 
-                  opacity: isCurrent ? 1 : 0.5,
-                  scale: isCurrent ? 1 : 0.95,
-                  y: isCurrent ? 0 : stackIndex * 4,
-                  rotateX: isCurrent ? tiltX : 0,
-                  rotateY: isCurrent ? tiltY : 0,
-                  zIndex: isCurrent ? 10 : 10 - stackIndex
-                }}
-                exit={{ 
-                  opacity: 0, 
-                  scale: 0.9, 
-                  x: exitDirection === 'like' ? 300 : exitDirection === 'pass' ? -300 : 0,
-                  rotate: exitDirection === 'like' ? 20 : exitDirection === 'pass' ? -20 : 0,
-                  transition: { duration: 0.3 }
-                }}
-                transition={{ 
-                  type: "spring", 
-                  stiffness: 300, 
-                  damping: 30,
-                  opacity: { duration: 0.2 },
-                  scale: { duration: 0.2 }
-                }}
-                onAnimationComplete={() => {
-                  if (exitDirection) {
-                    setExitDirection(null)
-                  }
-                }}
-                style={{
-                  position: isCurrent ? 'relative' : 'absolute',
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  bottom: 0
-                }}
-              >
-                <GlassCard
-                  className="browse-card swipeable"
-                  ref={isCurrent ? cardRef : null}
-                  onMouseDown={isCurrent ? onPointerDown : undefined}
-                  onMouseMove={isCurrent ? onPointerMove : undefined}
-                  onMouseUp={isCurrent ? onPointerUp : undefined}
-                  onTouchStart={isCurrent ? onPointerDown : undefined}
-                  onTouchMove={isCurrent ? onPointerMove : undefined}
-                  onTouchEnd={isCurrent ? onPointerUp : undefined}
-                  onMouseEnter={isCurrent ? handleMouseMove : undefined}
-                  onMouseLeave={isCurrent ? handleMouseLeave : undefined}
-                  hover={false}
-                >
-                  <div className="swipe-indicator like" style={{opacity: 0}}>LIKE</div>
-                  <div className="swipe-indicator pass" style={{opacity: 0}}>PASS</div>
-                  
-                  {/* Match Designation Badge */}
-                  {profileDesignation && (
-                    <div className="match-designation" style={{ backgroundColor: profileDesignation.color }}>
-                      <span className="match-emoji">{profileDesignation.emoji}</span>
-                      <span className="match-label">{profileDesignation.label}</span>
-                    </div>
-                  )}
-                  
-                  <div className="profile-header">
-                    {profile.profile_picture ? (
-                      <img src={profile.profile_picture} alt="Profile" className="profile-image" />
-                    ) : (
-                      <div className="profile-placeholder">
-                        {profile.user_id.slice(0, 1).toUpperCase()}
-                      </div>
-                    )}
-                    <div className="profile-info">
-                      <h2>{(profile.name || 'Friend') + "'s Top 5"}</h2>
-                      <p className="location">{(profile.age ? profile.age + ' · ' : '') + (profile.location || '')}</p>
-                      {profileDistance !== null && (
-                        <p className="distance">📍 {profileDistance} miles away</p>
-                      )}
-                    </div>
-                  </div>
+          <div className="favorites-section">
+            {currentProfile.favorites.map((fav, idx) => {
+              const isExactMatch = matchData.exactMatches.some(match => match.index2 === idx)
+              return (
+                <div key={idx} className={`browse-favorite-item ${isExactMatch ? 'exact-match' : ''}`}>
+                  <span className="browse-favorite-number">#{idx + 1}</span>
+                  <span className="browse-favorite-text">{fav}</span>
+                  {isExactMatch && <span className="sparkle">✨</span>}
+                </div>
+              )
+            })}
+          </div>
 
-                  {/* Match Details */}
-                  {profileMatchDetails.length > 0 && (
-                    <div className="match-details">
-                      {profileMatchDetails.map((detail, idx) => (
-                        <div key={idx} className={`match-detail ${detail.type}`}>
-                          {detail.text}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  <div className="favorites-section">
-                    {profile.favorites.map((fav, idx) => {
-                      const isExactMatch = profileMatchData.exactMatches.some(match => match.index2 === idx)
-                      return (
-                        <div key={idx} className={`favorite-item ${isExactMatch ? 'exact-match' : ''}`}>
-                          <span className="favorite-number">#{idx + 1}</span>
-                          <span className="favorite-text">{fav}</span>
-                          {isExactMatch && <span className="sparkle">✨</span>}
-                        </div>
-                      )
-                    })}
-                  </div>
-
-                  {isCurrent && (
-                    <div className="swipe-actions">
-                      <Button 
-                        variant="secondary" 
-                        size="md"
-                        onClick={() => handleSwipe(false)} 
-                        disabled={actionLoading}
-                        className="pass-button"
-                      >
-                        ✕ Pass
-                      </Button>
-                      <Button 
-                        variant="primary" 
-                        size="md"
-                        onClick={() => handleSwipe(true)} 
-                        disabled={actionLoading}
-                        className="like-button"
-                      >
-                        ♥ Like
-                      </Button>
-                    </div>
-                  )}
-                </GlassCard>
-              </motion.div>
-            )
-          })}
-        </AnimatePresence>
-      </div>
+          <div className="browse-actions">
+            <Button 
+              variant="secondary" 
+              size="md"
+              onClick={() => handleSwipe(false)} 
+              disabled={actionLoading}
+            >
+              ✕ Pass
+            </Button>
+            <Button 
+              variant="primary" 
+              size="md"
+              onClick={() => handleSwipe(true)} 
+              disabled={actionLoading}
+            >
+              ♥ Like
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
