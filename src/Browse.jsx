@@ -340,9 +340,11 @@ function Browse() {
               const isExactMatch = matchData.exactMatches.some(match => match.index2 === idx)
               return (
                 <div key={idx} className={`browse-favorite-item ${isExactMatch ? 'exact-match' : ''}`}>
-                  <span className="browse-favorite-number">#{idx + 1}</span>
-                  <span className="browse-favorite-text">{fav}</span>
-                  {isExactMatch && <span className="sparkle">✨</span>}
+                  <div className="browse-favorite-content">
+                    <span className="browse-favorite-number">#{idx + 1}</span>
+                    <span className="browse-favorite-text">{fav}</span>
+                    {isExactMatch && <span className="sparkle">✨</span>}
+                  </div>
                 </div>
               )
             })}

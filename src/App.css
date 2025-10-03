@@ -436,15 +436,22 @@ button:active {
 
 /* Browse page specific styling */
 .browse-favorite-item {
-  background: #FAFAFA;
-  border: 1px solid #F0F0F0;
+  background: #F0F0F0;
+  border: 1px solid #E0E0E0;
   border-radius: 4px;
-  padding: 10px 12px;
+  padding: 8px;
   margin-bottom: 8px;
   font-size: 14px;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+.browse-favorite-content {
+  background: #FFFFFF;
+  border: 1px solid #F0F0F0;
+  border-radius: 3px;
+  padding: 10px 12px;
   display: flex;
   align-items: center;
-  font-family: 'Times New Roman', Times, serif;
 }
 
 .browse-favorite-number {
